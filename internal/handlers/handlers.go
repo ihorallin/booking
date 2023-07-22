@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/ihorallin/bookings/pkg/config"
-	"github.com/ihorallin/bookings/pkg/models"
-	"github.com/ihorallin/bookings/pkg/render"
+	"github.com/ihorallin/bookings/internal/config"
+	"github.com/ihorallin/bookings/internal/models"
+	"github.com/ihorallin/bookings/internal/render"
 )
 
 var Repo *Repository

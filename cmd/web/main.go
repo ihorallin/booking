@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"github.com/ihorallin/bookings/pkg/config"
-	"github.com/ihorallin/bookings/pkg/handlers"
-	"github.com/ihorallin/bookings/pkg/render"
+	"github.com/ihorallin/bookings/internal/config"
+	"github.com/ihorallin/bookings/internal/handlers"
+	"github.com/ihorallin/bookings/internal/render"
 	"github.com/alexedwards/scs/v2"
 )
 

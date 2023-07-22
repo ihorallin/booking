@@ -72,8 +72,9 @@
         </form>
         `;
         attention.custom({
-            title: 'Choose your dates',
             msg: html,
+            title: 'Choose your dates',
+            
             willOpen: () => {
                 const elem = document.getElementById("reservation-dates-modal");
                 const rp = new DateRangePicker(elem, {

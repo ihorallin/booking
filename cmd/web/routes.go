@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"github.com/ihorallin/bookings/pkg/config"
-	"github.com/ihorallin/bookings/pkg/handlers"
+	"github.com/ihorallin/bookings/internal/config"
+	"github.com/ihorallin/bookings/internal/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )

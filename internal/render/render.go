@@ -7,9 +7,8 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
-
-	"github.com/ihorallin/bookings/pkg/config"
-	"github.com/ihorallin/bookings/pkg/models"
+	"github.com/ihorallin/bookings/internal/config"
+	"github.com/ihorallin/bookings/internal/models"
 	"github.com/justinas/nosurf"
 )
 
@@ -24,7 +23,6 @@ func NewTemplates(a *config.AppConfig) {
 
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
 	td.CSFRToken = nosurf.Token(r)
-	fmt.Println("Token", td.CSFRToken)
 	return td
 }
 
