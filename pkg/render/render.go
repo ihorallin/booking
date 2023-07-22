@@ -2,40 +2,42 @@ package render
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+
 	"github.com/ihorallin/bookings/pkg/config"
-	"github.com/ihorallin/bookings/pkg/modules"
+	"github.com/ihorallin/bookings/pkg/models"
+	"github.com/justinas/nosurf"
 )
 
-var functions = template.FuncMap {
-
-}
+var functions = template.FuncMap{}
 
 var app *config.AppConfig
 
-// NewTemplates sets the config form the template package
+// NewTemplates sets the config for the template package
 func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(td *modules.TemplateData) *modules.TemplateData {
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSFRToken = nosurf.Token(r)
+	fmt.Println("Token", td.CSFRToken)
 	return td
 }
 
-// RenderTemplate render template using html/mplate
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *modules.TemplateData) {
+// RenderTemplate renders a template
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 
 	if app.UseCache {
-		// Get the template cache from the App config
+		// get the template cache from the app config
 		tc = app.TemplateCache
 	} else {
 		tc, _ = CreateTemplateCache()
 	}
-
 
 	t, ok := tc[tmpl]
 	if !ok {
@@ -44,20 +46,20 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *modules.TemplateData
 
 	buf := new(bytes.Buffer)
 
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
-	err := t.Execute(buf, td)
+	_ = t.Execute(buf, td)
+
+	_, err := buf.WriteTo(w)
 	if err != nil {
-		log.Println(err)
+		fmt.Println("error writing template to browser", err)
 	}
 
-	_, err = buf.WriteTo(w)
-	if err != nil {
-		log.Println(err)
-	}
 }
 
+// CreateTemplateCache creates a template cache as a map
 func CreateTemplateCache() (map[string]*template.Template, error) {
+
 	myCache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob("./templates/*.page.tmpl")
@@ -67,7 +69,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	for _, page := range pages {
 		name := filepath.Base(page)
-		ts, err := template.New(name).ParseFiles(page)
+		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
 			return myCache, err
 		}
