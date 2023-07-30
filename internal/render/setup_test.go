@@ -7,6 +7,7 @@ import (
 	"os"
 	"testing"
 	"time"
+
 	"github.com/alexedwards/scs/v2"
 	"github.com/ihorallin/bookings/internal/config"
 	"github.com/ihorallin/bookings/internal/models"
@@ -19,14 +20,14 @@ func TestMain(m *testing.M) {
 
 	gob.Register(models.Reservation{})
 
-	// change this to true when in production
-	testApp.InProduction = false
-
-	inforLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
-	testApp.InfoLog = inforLog
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	testApp.InfoLog = infoLog
 
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	testApp.ErrorLog = errorLog
+
+	// change this to true when in production
+	testApp.InProduction = false
 
 	// set up the session
 	session = scs.New()
